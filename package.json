@@ -1,0 +1,24 @@
+{
+  "name": "sistemasoperativos_isw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuciaSanchezMiranda/SistemasOperativos_isw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuciaSanchezMiranda/SistemasOperativos_isw/issues"
+  },
+  "homepage": "https://github.com/LuciaSanchezMiranda/SistemasOperativos_isw#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "tailwindcss": "^4.1.17"
+  }
+}

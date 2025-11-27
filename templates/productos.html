@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - BeautyStore</title>
+    <link rel="stylesheet" href="/static/css/output.css">
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-purple-50">
+    <nav class="bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                    <h1 class="text-white text-2xl font-bold">BeautyStore</h1>
+                    <span class="text-pink-100 text-sm">Cosméticos Premium</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <span class="text-white">Bienvenida, <span id="userName" class="font-semibold">{{ user_name }}</span></span>
+                    <a href="/logout" class="bg-white text-pink-600 px-4 py-2 rounded-lg font-semibold hover:bg-pink-50 transition-all">
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 mb-2">Nuestros Productos</h2>
+            <p class="text-gray-600">Descubre nuestra selección de cosméticos premium para tu belleza</p>
+        </div>
+
+        <div class="mb-6 flex flex-wrap gap-4">
+            <input type="text" id="searchInput" placeholder="Buscar productos..." 
+                class="flex-1 min-w-64 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+            
+            <select id="categoryFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                <option value="">Todas las categorías</option>
+                <option value="maquillaje">Maquillaje</option>
+                <option value="skincare">Skincare</option>
+                <option value="fragancias">Fragancias</option>
+                <option value="cabello">Cabello</option>
+                <option value="cuidado_personal">Cuidado Personal</option>
+            </select>
+        </div>
+
+        <div id="productosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
+
+        <div id="noProducts" class="hidden text-center py-16">
+            <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+            </svg>
+            <p class="text-gray-500 text-xl">No se encontraron productos</p>
+        </div>
+
+        <div id="loadingSpinner" class="flex justify-center items-center py-16">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-pink-600"></div>
+        </div>
+    </div>
+
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-screen overflow-y-auto p-8 transform transition-all">
+            <div class="flex justify-between items-start mb-6">
+                <h3 id="modalTitle" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600"></h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
+            </div>
+            
+            <div id="modalImage" class="mb-6 rounded-lg overflow-hidden bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center" style="height: 300px;">
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <span class="text-sm text-gray-500">Categoría:</span>
+                    <p id="modalCategory" class="text-gray-800 font-semibold"></p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-500">Descripción:</span>
+                    <p id="modalDescription" class="text-gray-700"></p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-500">Especificaciones:</span>
+                    <p id="modalSpecs" class="text-gray-700"></p>
+                </div>
+                <div class="flex justify-between items-center pt-4 border-t">
+                    <span id="modalStock" class="text-sm font-semibold"></span>
+                    <span id="modalPrice" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/productos.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrador - BeautyStore</title>
+    <link rel="stylesheet" href="/static/css/output.css">
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-purple-50">
+    <nav class="bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <h1 class="text-white text-2xl font-bold">Panel Administrador</h1>
+                </div>
+                <a href="/logout" class="bg-white text-pink-600 px-4 py-2 rounded-lg font-semibold hover:bg-pink-50 transition-all">
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Gestión de Clientes</h2>
+                    <p class="text-gray-600 mt-1">Administra los clientes registrados</p>
+                </div>
+                <button id="btnNuevoUsuario" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                    + Nuevo Cliente
+                </button>
+            </div>
+
+            <div class="mb-4">
+                <input type="text" id="searchUsuario" placeholder="Buscar por nombre, DNI o correo..." 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gradient-to-r from-pink-50 to-purple-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Nombre</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Apellidos</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">DNI</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Teléfono</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Correo</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Dirección</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuariosTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="noUsuarios" class="hidden text-center py-16">
+                <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <p class="text-gray-500 text-xl">No hay clientes registrados</p>
+            </div>
+
+            <div id="loadingTable" class="flex justify-center items-center py-16">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-pink-600"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-screen overflow-y-auto transform transition-all">
+            <div class="sticky top-0 bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-6 rounded-t-2xl">
+                <div class="flex justify-between items-center">
+                    <h3 id="modalTitulo" class="text-2xl font-bold text-white"></h3>
+                    <button id="closeModalBtn" class="text-white hover:text-gray-200 text-3xl leading-none">&times;</button>
+                </div>
+            </div>
+
+            <form id="usuarioForm" class="p-8">
+                <input type="hidden" id="usuarioId">
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">Nombre *</label>
+                        <input type="text" id="nombre" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellidos" class="block text-sm font-medium text-gray-700 mb-2">Apellidos *</label>
+                        <input type="text" id="apellidos" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dni" class="block text-sm font-medium text-gray-700 mb-2">DNI (8 dígitos) *</label>
+                        <input type="text" id="dni" required maxlength="8" pattern="\d{8}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono" class="block text-sm font-medium text-gray-700 mb-2">Teléfono (9 dígitos) *</label>
+                        <input type="tel" id="telefono" required maxlength="9" pattern="\d{9}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="form-group md:col-span-2">
+                        <label for="correo" class="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico *</label>
+                        <input type="email" id="correo" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="form-group md:col-span-2">
+                        <label for="direccion" class="block text-sm font-medium text-gray-700 mb-2">Dirección *</label>
+                        <textarea id="direccion" required rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estado" class="block text-sm font-medium text-gray-700 mb-2">Estado *</label>
+                        <select id="estado" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="formError" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
+
+                <div class="flex gap-4 mt-8">
+                    <button type="submit" id="saveBtn"
+                        class="flex-1 bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                        Guardar
+                    </button>
+                    <button type="button" id="cancelBtn"
+                        class="px-8 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 transform transition-all">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Confirmar Eliminación</h3>
+                <p class="text-gray-600">¿Estás seguro de eliminar este cliente? Esta acción no se puede deshacer.</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <button id="confirmDeleteBtn"
+                    class="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-all">
+                    Eliminar
+                </button>
+                <button id="cancelDeleteBtn"
+                    class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/crud.js"></script>
+</body>
+</html>
